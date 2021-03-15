@@ -22,8 +22,24 @@ router.get("/addProfile", async (req, res) => {
   try {
     const user = await UserModel.findOne(req.body.cred);
     console.log(req.body);
-    if(user.savedProfiles.indexOf(profile) != -1)
-        user.savedProfiles.push(req.body.profile);
+    if (user.savedProfiles.indexOf(req.body.profile) == -1) {
+      console.log(user.savedProfiles.indexOf(req.body.profile));
+      user.savedProfiles.push(req.body.profile);
+    }
+    res.send(user.savedProfiles);
+    await user.save();
+  } catch (err) {
+    res.send("Unable to add profile.").status(400);
+  }
+});
+
+router.get("/removeProfile", async (req, res) => {
+  try {
+    const user = await UserModel.findOne(req.body.cred);
+    const idx = user.savedProfiles.indexOf(req.body.profile) != -1;
+    if (idx != -1) {
+      user.savedProfiles.splice(idx, 1);
+    }
     res.send(user.savedProfiles);
     await user.save();
   } catch (err) {
