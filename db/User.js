@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const url = "mongodb://localhost:27017/userData";
+const url = "mongodb+srv://mongodb:mongodb11@cluster0.kf1om.mongodb.net/user?retryWrites=true&w=majority";
 mongoose.connect(url, {
   useNewUrlParser: true,
   useCreateIndex: true,
@@ -25,6 +25,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  savedProfiles: {
+      type:Array,
+      default: []
+  }
 });
 
 const Users = mongoose.model("Users", userSchema);
