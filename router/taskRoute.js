@@ -7,10 +7,11 @@ const app = express();
 
 app.use(express.json());
 
-router.get("/login", async (req, res) => {
+router.post("/login", async (req, res) => {
   try {
-    const users = await UserModel.findOne(req.body);
-    res.status(200).send(users);
+  	console.log(req.body);
+    const user = await UserModel.findOne(req.body);
+    res.status(200).send(user);
   } catch (err) {
     res.status(400).send({
       error: err.message,
@@ -18,17 +19,17 @@ router.get("/login", async (req, res) => {
   }
 });
 
-router.get("/addProfile", async (req, res) => {
+router.post("/profile", async (req, res) => {
   try {
-    const user = await UserModel.findOne(req.body.cred);
-    console.log(req.body);
-    if (user.savedProfiles.indexOf(req.body.profile) == -1) {
-      console.log(user.savedProfiles.indexOf(req.body.profile));
-      user.savedProfiles.push(req.body.profile);
-    }
-    res.send(user.savedProfiles);
+  	console.log(req.body);
+    const user = await UserModel.findOne({email:req.body.email});
+    
+    user.savedProfiles = req.body.savedProfiles;
     await user.save();
+    res.send(user.savedProfiles);
+   	
   } catch (err) {
+  	console.log("fail");
     res.send("Unable to add profile.").status(400);
   }
 });
